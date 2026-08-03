@@ -1,0 +1,288 @@
+/*===============================GLOBAL STYLES========================================*/
+:root{
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --bg-color: #f3f4f6;
+    --card-bg: #ffffff;
+    --text-main: #1f2937;
+    --text-muted:#6b7280;
+    --danger-color: #ef4444;
+    --success-color:#10b981;
+    --border-color:#e5e7eb;
+    --radius: 8px;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Utility class to hide/show views */
+.hidden {
+display: none !important;
+}
+
+/*============================BUTTONS & INPUTS ===========================================*/
+.btn {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease,transform 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary{
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.btn-primary:hover{
+    background-color: var(--primary-hover);
+}
+
+.btn-secondary{
+  background-color: #e5e7eb;
+  color: var(--text-main)
+}
+
+.btn-secondary:hover{
+    background-color: #d1d5db;
+}
+
+.btn-sm{
+    padding:0.4rem 0.8rem;
+    font-size:0.875rem;
+}
+
+input[type="text"],input[type="password"]{
+    width: 100%;
+    padding: 0.5rem;
+    border:1px solid var(--border-color);
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+input:focus{
+    border-color:var(--primary-color);
+}
+
+/* ================================= LOGIN SECTION =========================*/
+.auth-container{
+    width: 100%;
+    max-width: 400px;
+    padding: 1rem;
+}
+
+.auth_card{
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.brand-header{
+    text-align:center;
+    margin-bottom:1.5rem;
+}
+
+.logo-icon{
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom:0.5rem;
+}
+.brand-header p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+.input-group{
+    margin-bottom: 1.25rem;
+}
+
+.input-group label{
+    display:block;
+    font-size: 0.875rem;
+    font-weight:500;
+    margin-bottom:0.4rem;
+}
+
+.error-msg{
+   color:var(--danger-color);
+   font-size:0.85rem;
+   margin-bottom:1rem;
+   min-height:1.2rem;
+}
+
+/*======================================DASHBOARD SECTION========================================*/
+
+.dashboard-container{
+width:100%;
+max-width:700px;
+min-height:100vh;
+display: flex;
+flex-direction:column;
+padding:1.5rem;
+}
+
+/* HEADER*/
+
+.app-header{
+ display:flex;
+ justify-content: space-between;
+ align-items: center;
+ background:var(--card-bg);
+ padding: 1rem 1.5rem;
+ border-radius: var(--radius);
+ box-shadow:var(--shadow);
+ margin-bottom: 1.5rem;
+}
+
+.app-header .brand{
+    display:flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-color);
+}
+
+.app-header h1{
+    font-size: 1.25rem;
+}
+
+.user-profile{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* MAIN CARDS*/
+
+.card {
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+}
+
+.task-form{
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.task-header {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.badge{
+    background-color: var(--bg-color);
+
+    color: var(--text-muted);
+    padding:0.25rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* TASK ITEMS*/
+.task-list{
+    list-style:none;
+}
+
+.task-item {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    margin-bottom: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.task-item:hover{
+    background-color:#f9fafb;
+}
+
+.task-content{
+    display:flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+
+.task-content.completed span{
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.text-actions{
+    display:flex;
+    gap:0.5rem;
+}
+
+.btn-icon{
+    background: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 1rem;
+    padding: 0.2rem 0.4rem;
+    transition: color 0.2s;
+}
+
+.btn-icon:hover{
+    color:var(--danger-color);
+}
+
+/* EMPTY STATE*/
+.empty-state{
+    text-align:center;
+    padding:2rem 0;
+    color:var(--text-muted);
+}
+
+.empty-state i{
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
+}
+
+/*Resposive Styles*/
+@media (max-width:600px){
+    .dashboard-container{
+        padding: 0.75rem;
+    }
+    .task-form{
+        flex-direction: column;
+    }
+    .app-header{
+        flex-direction: column;
+        gap:0.75rem;
+        align-items:flex-start;
+    }
+}
