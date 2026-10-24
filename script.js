@@ -1,164 +1,93 @@
-// =======================================DOM ELEMENTS =================================================
-const loginSection = document.getElementById('login-section');
-const dashboardSection = document.getElementById('dashboard-section');
-// =======================================Auth ELEMENTS =================================================
-const loginForm = document.getElementById('login-form');
-const usernameInput = document.getElementById('username');
-const loginError = document.getElementById('login-error');
-const userDisplayName = document.getElementById('user-display-name');
-const logoutBtn = document.getElementById('logout-btn');
-// ======================================== TASK ELEMENTS ================================================
-const taskForm = document.getElementById('task-form');
-const taskInput = document.getElementById('task-input');
-const taskList = document.getElementById('task-list');
-const emptyState = document.getElementById('empty-state');
-const taskCount = document.getElementById('task-count');
-
-// ==========================================STATE MANAGEMENT ===============================================
-let currentUser = null;
-let tasks = [];
-
-// =========================================INITIALISATION ===================================================
-document.addEventListener('DOMContentLoaded',() =>
-{
-    //check if a user is already logged in
-    const savedUser = localStorage.getItem('currentUser');
-    if(savedUser){
-        currentUser = savedUser;
-        showDashboard();
-    }
-    else {
-        showLogin();
-    }
+// ---------- 1. Grab elements ----------
+const taskInput = document.getElementById("taskInput");
+const addBtn = document.getElementById("addBtn");
+const taskList = document.getElementById("taskList");
+const counter = document.getElementById("counter");
+const clearBtn = document.getElementById("clearBtn");
+const filterButtons = document.querySelectorAll(".filter");
+// ---------- 2. State ----------
+let tasks = loadTasks(); // the single source of truth
+let currentFilter = "all"; // "all" | "active" | "completed"
+// ---------- 3. Storage ----------
+function saveTasks() {
+localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+function loadTasks() {
+try {
+return JSON.parse(localStorage.getItem("tasks")) || [];
+} catch (e) {
+return [];
+}
+}
+// ---------- 4. Actions (change data, then redraw) ----------
+function addTask() {
+const text = taskInput.value.trim();
+if (text === "") return; // ignore empty input
+tasks.push({ id: Date.now(), text: text, done: false });
+taskInput.value = "";
+taskInput.focus();
+update();
+}
+function toggleTask(id) {
+tasks = tasks.map((t) => (t.id === id ? { ...t, done: !t.done } : t));
+update();
+}
+function deleteTask(id) {
+tasks = tasks.filter((t) => t.id !== id);
+update();
+}
+function clearCompleted() {
+tasks = tasks.filter((t) => !t.done);
+update();
+}
+function setFilter(filter) {
+currentFilter = filter;
+filterButtons.forEach((b) =>
+b.classList.toggle("active", b.dataset.filter === filter)
+);
+render();
+}
+// ---------- 5. Drawing the page ----------
+function visibleTasks() {
+if (currentFilter === "active") return tasks.filter((t) => !t.done);
+if (currentFilter === "completed") return tasks.filter((t) => t.done);
+return tasks;
+}
+function render() {
+taskList.innerHTML = ""; // wipe the old list
+visibleTasks().forEach((task) => {
+const li = document.createElement("li");
+if (task.done) li.classList.add("done");
+const checkbox = document.createElement("input");
+checkbox.type = "checkbox";
+checkbox.checked = task.done;
+checkbox.addEventListener("change", () => toggleTask(task.id));
+const span = document.createElement("span");
+span.textContent = task.text; // textContent = safe
+const del = document.createElement("button");
+del.className = "delete";
+del.textContent = "\u00D7";
+del.setAttribute("aria-label", "Delete task");
+del.addEventListener("click", () => deleteTask(task.id));
+li.append(checkbox, span, del);
+taskList.appendChild(li);
 });
-
-// =========================================== AUTHENTICATION LOGIC =============================================
-loginForm.addEventListener('submit',(e)=>
-{
-    e.preventDefault();
-    const username = usernameInput.value.trim();
-    if(username === '')
-    {
-        loginError.textContent = 'Please enter a valid username.';
-        return;
-    }
-    // Save session to Local storage
-    currentUser = username;
-    localStorage.setItem('currentUser',currentUser);
-    // Reset the form and view dashboard
-    loginError.textContent = '';
-    loginForm.reset();
-    showDashboard();
+const left = tasks.filter((t) => !t.done).length;
+counter.textContent = left + (left === 1 ? " task left" : " tasks left");
+}
+// save + redraw together
+function update() {
+saveTasks();
+render();
+}
+// ---------- 6. Events ----------
+addBtn.addEventListener("click", addTask);
+taskInput.addEventListener("keydown", (e) => {
+if (e.key === "Enter") addTask();
 });
-
-logoutBtn.addEventListener('click',() =>
-{
-    //Clear user session
-    localStorage.removeItem('currentUser');
-    currentUser = null;
-    tasks = [];
-    showLogin();
-});
-
-function showLogin()
-{
-    loginSection.classList.remove('hidden');
-    dashboardSection.classList.add('hidden');
-}
-
-function showDashboard()
-{
-    loginSection.classList.add('hidden');
-    dashboardSection.classList.remove('hidden');
-    userDisplayName.textContent = currentUser;
-    // Load user-specific tasks from Local Storage
-    loadTasks();
-}
-
-//================================================ TASK LOGIC =============================================
-// Load task for current user 
-function loadTasks()
-{
-    const storedTasks = localStorage.getItem(`tasks_${currentUser}`);
-    tasks = storedTasks ? JSON.parse(storedTasks) : [];
-    renderTasks();
-}
-
-// save tasks array to local Storage
-function saveTasks()
-{
-    localStorage.setItem(`tasks_${currentUser}`,JSON.stringify(tasks));
-    renderTasks();
-}
-
-// ADD Task
-taskForm.addEventListener('submit',(e) => 
-{
-    e.preventDefault();
-    const taskText = taskInput.value.trim();
-    if(!taskText) return;
-    const newTask ={
-        id: Date.now().toString(),//unique ID using timestamp
-        text: taskText,completed: false
-    };
-    tasks.push(newTask);
-    saveTasks();
-    taskInput.value = '';
-});
-
-// Toggle Task Completion status 
-function toggleTask(id){
-    tasks = tasks.map(task =>{
-        if(task.id===id){
-            return {...task,completed: !task.completed };
-        }
-        return task;
-    });
-    saveTasks();
-}
-
-//Delete Task
-function deleteTask(id){
-    tasks=tasks.filter(task => task.id !== id);
-    saveTasks();
-}
-
-// =============================================RENDER LOGIC =========================================================
-function renderTasks()
-{
-    //Clear list content 
-    taskList.innerHTML ='';
-    //Handle empty state
-    if(tasks.length===0)
-    {
-        emptyState.classList.remove('hidden');
-    }
-    else{
-        emptyState.classList.add('hidden');
-    }
-    //Render individual task items
-    tasks.forEach(task =>{
-        const li = document.createElement('li');
-        li.className = 'task-item';
-        li.innerHTML = `<div class="task-content ${task.completed ? 'completed' : ''}" onclick = "toggleTask('${task.id}')">
-                         <i class = "fa-regular ${task.completed ? 'fa-square-check': 'fa-square'}"></i>
-                         <span>${escapeHTML(task.text)}</span>
-                         </div>
-                         <div class = "task-actions">
-                         <button class="btn-icon" onclick = "deleteTask('${task.id}')"title = "Delete Task">
-                         <i class = "fa-solid fa-trash"></i>
-                         </button>
-                         </div>`;
-            taskList.appendChild(li);
-    });
-    
-    // Update badge counter
-    const pendingCount = tasks.filter(t => ! t.completed).length;
-    taskCount.textContent = `${pendingCount} pending`;
-}
-
-// Helper to escape HTML characters  and prevent basic XSS
-function escapeHTML(str)
-{
-    return str.replace(/[&<>'"]/g,tag => ({'&': '&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[tag] || tag));
-}
+clearBtn.addEventListener("click", clearCompleted);
+filterButtons.forEach((b) =>
+b.addEventListener("click", () => setFilter(b.dataset.filter))
+);
+// ---------- 7. First draw ----------
+render();

@@ -1,80 +1,24 @@
-<!DOCTYPE html>
-<html lang=""en>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <title>Smart To-Do List</title>
-        <link rel="stylesheet" href="style.css">
-        <!-- Font Awesome for sleek action icons -->
-         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    </head>
-
-    <body>
-        <!-- ==================================LOGIN SECTION======================================================-->
-         <section id="login-section" class="auth-container">
-            <div class="auth-card">
-                <div class="brand-header">
-                    <i class="fa-solid fa-list-check logo-icon"></i>
-                    <h2>Smart To-Do</h2>
-                    <p>Welcome back! Please Enter your Details.</p>
-                </div>
-                <form id="login-form">
-                    <div class="input-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" placeholder="Enter your username" required autocomplete="off">
-                    </div>
-                    <div class="input-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" placeholder="........" required>
-                    </div>
-                    <p id="login-error" class="error-msg"></p>
-                    <button type="submit" class="btn btn-primary">Sign In</button>
-                </form>
-            </div>
-        </section>
-        <!-- ===================================================Dashboard Section===============================================-->
-         <section id="dashboard-section" class="dashboard-container hidden">
-            <!-- =====Navbar / Header======= -->
-             <header class="app-header">
-                <div class="brand">
-                    <i class="fa-solid fa-list-check"></i>
-                    <h1>Task Dashboard</h1>
-                </div>
-                <div class="user-profile">
-                    <span>Hi, <strong id="user-display-name">User</strong>!</span>
-                    <button id="logout-btn" class="btn btn-secondary btn-sm"><i class="fa-solid fa-right-from-bracket"></i>Logout</button>
-                </div>
-             </header>
-             <!-- ======Main App Body ================= -->
-              <main class="app-main">
-                <!-- ===== Input Card ====== -->
-                 <div class="card task-input-card">
-                    <h3>Create a New Task</h3>
-                    <form id="task-form" class="task-form">
-                        <input type="text" id="task-input" placeholder="What needs to be done?" required autocomplete="off">
-                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i>Add Task</button>
-                    </form>
-                 </div>
-                <!-- ==========Task List Card ============ -->
-                 <div class="card task-list-card">
-                    <div class="task-header">
-                        <h3>Your Tasks</h3>
-                        <span id="task-count" class="badge">0 tasks</span>
-                    </div>
-                    <!-- =========Task List container=========-->
-                     <ul id="task-list" class="task-list">
-                    <!-- Tasks will be dynamically rendered here via javaScript -->
-                     </ul>
-                    <!-- Empty state message-->
-                     <div id="empty-state" class="empty-state">
-                        <i class="fa-solid fa-clipboard-check"></i>
-                        <p>No tasks yet! Add one above to get started.</p>
-                     </div>
-                 </div>
-              </main>
-
-         </section>
-
-         <script src="script.js"></script>
-    </body>
-</html>
+<!DOCTYPE html> 
+<html lang="en"> 
+    <head>  
+        <meta charset="UTF-8" /> 
+         <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+          <title>To-Do List</title>  <link rel="stylesheet" href="style.css" />
+         </head> <body>  <main class="app">  
+              <h1>To-Do List</h1>  
+                <div class="add-row">    
+                      <input id="taskInput" type="text" placeholder="What needs to be done?" />   
+                         <button id="addBtn">Add</button>   
+                         </div>  
+                         
+                           <div class="filters">   
+                            
+                               <button class="filter active" data-filter="all">All</button>    
+                                 <button class="filter" data-filter="active">Active</button>   
+                                 <button class="filter" data-filter="completed">Completed</button> 
+                                   </div>    <ul id="taskList"></ul>    <div class="footer"> 
+                                         <span id="counter">0 tasks left</span> 
+                                              <button id="clearBtn">Clear completed</button>
+                                                </div>  </main>  <script src="script.js"></script>
+                                             </body> 
+                                             </html>
